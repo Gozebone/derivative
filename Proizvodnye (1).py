@@ -79,25 +79,23 @@ def sing_finder(pos):
 
 
 def separate(part, separator):
-    part_1 = part_2 = ''
-    brackets = 0
-    for element in range(len(part)):
+    expressions = ['', '']
 
-        if part[element] == '(':
-            brackets += 1
+    for element in range(0, len(part)):
 
-        elif part[element] == ')':
-            brackets -= 1
+        if part[element] == separator:
 
-        if brackets == 0 and part[element]== separator:
-            for element_2 in range(element+1, len(part)):
-                part_2 += part[element_2]
-            break
+            for j in range(element + 1, len(part)):
+                expressions[1] += part[j]
 
-        part_1 += part[element]
+            der_1 = derivative(expressions[0])
+            der_2 = derivative(expressions[1])
 
-    return str(f'{derivative(part_1)}{separator}{derivative(part_2)}')
-    
+            return str(f'({der_1}{separator}{der_2})')
+
+        expressions[0] += part[element]
+
+    return part
 
 
 def sign_multiply(part):
@@ -143,6 +141,7 @@ def sign_div(part):
 def derivative(part):
     ans = ''
 
+    # проверка на внешние скобки
     while part[0] == '(' and part[len(part) - 1] == ')':
         temp = ''
         brackets = 1
@@ -159,6 +158,28 @@ def derivative(part):
             for element in range(1, len(part) - 1):
                 temp += part[element]
             part = temp
+
+    # разделение по плюсу
+    brackets = 0
+    for element in range(0, len(part)):
+        if part[element] == '(':
+            brackets += 1
+        elif part[element] == ')':
+            brackets -= 1
+        if part[element] == '+' and brackets == 0:
+            ans = separate(part, '+')
+            return ans
+
+    # разделение по минусу
+    brackets = 0
+    for element in range(0, len(part)):
+        if part[element] == '(':
+            brackets += 1
+        elif part[element] == ')':
+            brackets -= 1
+        if part[element] == '-' and brackets == 0:
+            ans = separate(part, '-')
+            return ans
 
     # проверка члена на умножение
     brackets = 0
@@ -493,46 +514,47 @@ def derivative(part):
 while True:
     expression = input("Введите выражение: ")
 
-    n = 2
-    parts = []
-
-    # проврка скобок в начале
-    # if expression[0] == '(':
-    # brackets = True
+    print(derivative(expression))
+    # n = 2
+    # parts = []
+    #
+    # # проврка скобок в начале
+    # # if expression[0] == '(':
+    # # brackets = True
+    # # else:
+    # # brackets = False
+    #
+    # # brackets = False
+    #
+    # if expression[0] == '-':
+    #     first_min = True
     # else:
-    # brackets = False
-
-    # brackets = False
-
-    if expression[0] == '-':
-        first_min = True
-    else:
-        first_min = False
-        parts = [sing_finder(1)]
-        print(sing_finder(1))
-
-    for i in expression:
-        # if i == "(":
-        # brackets = True
-        if i == '+' or i == '-':  # and brackets == False:
-            parts.append(sing_finder(n))
-            print(sing_finder(n))
-            n += 1
-        # elif i == ")":
-        # brackets = False
-
-    der_parts = ''
-    # взятие производной от каждого члена
-    for i in parts:
-        der_parts = der_parts + derivative(str(i))
-
-    while der_parts.find('* +') != -1:
-        der_list = list(der_parts)
-        der_list[der_parts.find('* +') + 1] = ''
-        der_list[der_parts.find('* +') + 2] = ''
-        der_parts = ''.join(der_list)
-
-    print("Производная: " + der_parts)
+    #     first_min = False
+    #     parts = [sing_finder(1)]
+    #     print(sing_finder(1))
+    #
+    # for i in expression:
+    #     # if i == "(":
+    #     # brackets = True
+    #     if i == '+' or i == '-':  # and brackets == False:
+    #         parts.append(sing_finder(n))
+    #         print(sing_finder(n))
+    #         n += 1
+    #     # elif i == ")":
+    #     # brackets = False
+    #
+    # der_parts = ''
+    # # взятие производной от каждого члена
+    # for i in parts:
+    #     der_parts = der_parts + derivative(str(i))
+    #
+    # while der_parts.find('* +') != -1:
+    #     der_list = list(der_parts)
+    #     der_list[der_parts.find('* +') + 1] = ''
+    #     der_list[der_parts.find('* +') + 2] = ''
+    #     der_parts = ''.join(der_list)
+    #
+    # print("Производная: " + der_parts)
 
     os.system("PAUSE")
     # атф и надф превращаются в энергию связей глюкозы а в последствии и другх орг соединений преобразование
