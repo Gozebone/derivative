@@ -1,10 +1,6 @@
 from derivative import der
-#from window import MyApp
+from window import MyApp
 import os
-
-
-# def clear(part):
-#     for element in range(len(part)):
 
 
 # |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -14,7 +10,7 @@ import os
 
 # НАЧАЛО
 while True:
-    #MyApp().run()
+    MyApp().run()
     expression = input("Введите выражение: ")
     print(der(expression))
 
