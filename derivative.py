@@ -21,14 +21,15 @@ def function_finder(part):
 
 
 def pow_func(part):
-    brackets = 0
-    for element in range(len(part)):
-        if part[element] == '(':
-            brackets += 1
-        elif part[element] == ')':
-            brackets -= 1
-        if brackets == 0 and part[element] == '^':
-            return True
+    if part.find('(') != -1:
+        brackets = 0
+        for element in range(len(part)):
+            if part[element] == '(':
+                brackets += 1
+            elif part[element] == ')':
+                brackets -= 1
+            if brackets == 0 and part[element] == '^':
+                return True
     return False
 
 
@@ -331,10 +332,11 @@ def der(part):
         # отделение константы
         for element in range(0, len(part)):
             if part[element] == 'l':
-                element += 3
-                while part[element].isnumeric():
+                element += 4
+                while part[element] != ']':
                     base += part[element]
                     element += 1
+                element += 1
                 if part[element] == '(':
                     brackets = 1
                     element += 1
