@@ -1,5 +1,6 @@
-
-
-class input_function():
-    def __init__(self):
-        self.expression = ''
+def clear_expression(part):
+    part = part.replace('--', '+')
+    part = part.replace('(+', '(')
+    part = part.replace('*+', '*')
+    part = part.replace('/+', '/')
+    return part

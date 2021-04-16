@@ -4,7 +4,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from derivative import der
-
+from output import clear_expression
 
 functions = {
     'Sin()': 'sin()',
@@ -93,7 +93,7 @@ class MainGrid(GridLayout):
     def result_click(self, instance):
         text = self.input_expression.text
         try:
-            self.output_expression.text = der(text.lower())
+            self.output_expression.text = clear_expression(der(text.lower()))
         except Exception:
             self.output_expression.text = 'none'
 

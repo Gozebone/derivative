@@ -290,9 +290,12 @@ def der(part):
             return ans
 
         if inside_derivative == '1':  # если внутри нет выражения
-            ans = str(f'{sign}-{const}/cos({inside})^2')
+            ans = str(f'{sign}-({const}/cos({inside})^2)')
         else:
-            ans = str(f'{sign}-{const}/cos({inside})^2*{inside_derivative}')
+            try:
+                ans = str(f'{sign}-({int(const)*int(inside_derivative)}/cos({inside})^2)')
+            except Exception:
+                ans = str(f'{sign}-{const}/cos({inside})^2*{inside_derivative}')
 
     # --------------------------------------------------------------------------------------------------------
     # проверка Котангенса
@@ -317,7 +320,10 @@ def der(part):
         if inside_derivative == '1':  # если внутри нет выражения
             ans = str(f'{sign}{const}/sin({inside})^2')
         else:
-            ans = str(f'{sign}{const}/sin({inside})^2*{inside_derivative}')
+            try:
+                ans = str(f'{sign}({int(const)*int(inside_derivative)}/sin({inside})^2)')
+            except Exception:
+                ans = str(f'{sign}({const}/(sin({inside})^2*{inside_derivative}))')
 
     # --------------------------------------------------------------------------------------------------------
     # проверка log
@@ -361,7 +367,10 @@ def der(part):
         if arg_derivative == '1':  # если внутри нет выражения
             ans = str(f'{sign}({const}/{arg}*ln({base}))')
         else:
-            ans = str(f'{sign}({const}*({arg_derivative})/({arg})*ln({base}))')
+            try:
+                ans = str(f'{sign}({int(const)*int(arg_derivative)}/({arg}*ln({base})))')
+            except Exception:
+                ans = str(f'{sign}({const}*({arg_derivative})/({arg})*ln({base}))')
 
     # --------------------------------------------------------------------------------------------------------
     # проверка ln
@@ -398,7 +407,10 @@ def der(part):
         if arg_derivative == '1':  # если внутри нет выражения
             ans = str(f'{sign}({const}/{arg}')
         else:
-            ans = str(f'{sign}({const}*({arg_derivative})/({arg}))')
+            try:
+                ans = str(f'{sign}({int(const)*int(arg_derivative)}/{arg})')
+            except Exception:
+                ans = str(f'{sign}({const}*({arg_derivative})/({arg}))')
 
     # --------------------------------------------------------------------------------------------------------
     # проверка exp
@@ -412,7 +424,7 @@ def der(part):
             const = '1'
         for element in range(0, len(part)):
             if part[element] == 'e':
-                element, aeg, arg_derivative = brackets_counter(element, arg, part)
+                element, arg, arg_derivative = brackets_counter(element, arg, part)
                 break
             const += part[element]
 
@@ -420,9 +432,12 @@ def der(part):
             return ans
 
         if arg_derivative == '1':  # если внутри нет выражения
-            ans = str(f'{sign}exp({arg})')
+            ans = str(f'{sign}{const}exp({arg})')
         else:
-            ans = str(f'{sign}exp({arg})*({arg_derivative})')
+            try:
+                ans = str(f'{sign}{int(const)*int(arg_derivative)}exp({arg})')
+            except Exception:
+                ans = str(f'{sign}{const}exp({arg})*({arg_derivative})')
 
     # --------------------------------------------------------------------------------------------------------
     # проверка x^n
@@ -475,6 +490,9 @@ def der(part):
                 const += part[element]
 
     elif part.find('x') != -1:
-        ans = '1'
+        const = ''
+        for i in range(part.find('x')):
+            const += part[i]
+        ans = const
 
     return ans
