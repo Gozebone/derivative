@@ -1,10 +1,21 @@
+import re
+
+
 def clear_expression(part):
     while checking_if_in_brackets(part):
         part = part[1:-1]
+
     part = part.replace('--', '+')
     part = part.replace('(+', '(')
     part = part.replace('*+', '*')
     part = part.replace('/+', '/')
+
+    part_list = re.split('([+|-])', part)
+
+    for element in range(len(part_list)):
+        if element != '-' and element != '+':
+            if element.find('+') != -1 and element.find('-') != -1:
+                clear_expression(part)
 
     return part
 
@@ -25,3 +36,6 @@ def checking_if_in_brackets(part):
 
     else:
         return False
+
+def split_with_separator(part):
+    
